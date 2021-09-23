@@ -45,10 +45,10 @@ const Cadastros: React.FC = () => {
     <div className="cadastros-container">
       <header>
         <img src={logoImage} alt="Job Pool" />
-        <span>Bem-vindo, <strong>{"Cadastros"}</strong>!</span>
+        <span>Bem-vindo, <strong>{nome_cadastro}</strong>!</span>
       </header>
 
-      <h1>Empresas Cadastradas</h1>
+      <h1>Cadastrados</h1>
 
       <Table striped bordered hover className="text-center">
         <thead>

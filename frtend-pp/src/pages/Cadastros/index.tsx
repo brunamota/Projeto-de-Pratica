@@ -1,16 +1,40 @@
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FiArrowRightCircle, FiArrowLeftCircle } from 'react-icons/fi'
 import { Table } from 'react-bootstrap'
 
-import logoImage from 'assets/images/user.png'
+import logoImage from '../../assets/images/user.png'
 
-import 'pages/Cadastro/style.css'
+import '../cadastros/styles.css'
+
 import NavBar from '../../componets/basics/navbar';
 import Footer from '../../componets/basics/footer';
 import API from '../../services/API';
 
-const Cadastro: React.FC = () => {
+type iCadastros = {
+  codigo_cadastro: number
+  nome_cadastro: string
+  email_cadastro: string
+}
+
+
+const Cadastros: React.FC = () => {
+
+  const [cadastros, setCadastros] = useState<iCadastros[]>([]);
+
+  const nome_cadastro = localStorage.getItem('nome_cadastro')
+  const email_cadastro = localStorage.getItem('email_cadastro')
+
+  const history = useHistory();
+
+  async function loadCadastros(){
+    const response = await API.get('v1/pp/cadastros')
+
+    setCadastros(response.data._embedded.cadastroDTOList)
+  }
+
+  useEffect(()=>{loadCadastros()})
 
   return (
     <>
@@ -18,10 +42,10 @@ const Cadastro: React.FC = () => {
       <NavBar />
     </div>
 
-    <div className="Cadastro-container">
+    <div className="cadastros-container">
       <header>
         <img src={logoImage} alt="Job Pool" />
-        <span>Bem-vindo, <strong>{"Cadastro"}</strong>!</span>
+        <span>Bem-vindo, <strong>{"Cadastros"}</strong>!</span>
       </header>
 
       <h1>Empresas Cadastradas</h1>
@@ -29,48 +53,20 @@ const Cadastro: React.FC = () => {
       <Table striped bordered hover className="text-center">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Nome</th>
-            <th>CNPJ</th>
             <th>Email</th>
-            <th>Telefone</th>
-            <th>Endereço</th>
-            <th>Area</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           {
+            cadastros.map(p => (
             <tr>
-              <td>Inteligente TI</td>
-              <td>00.000.000/0000-01</td>
-              <td>inteligente@empresa.com</td>
-              <td>(64) 3035-8795</td>
-              <td>Rua Oscar Freire,123, Jataí-GO</td>
-              <td>Tecnologia</td>
-              <td>
-                <button type="button">
-                  <FiArrowRightCircle size={20} color="#251FC5" />
-                </button>
-              </td>
+              <td>{p.codigo_cadastro}</td>
+              <td>{p.nome_cadastro}</td>
+              <td>{p.email_cadastro}</td>
             </tr>
-          }
-        </tbody>
-
-        <tbody>
-          {
-            <tr>
-              <td>Hospital Padre Thiago</td>
-              <td>00.000.000/0000-02</td>
-              <td>padrethiago@hospital.com</td>
-              <td>(64)99392-8877</td>
-              <td>R. Castro Alves, 686, Jataí-GO</td>
-              <td>Saúde</td>
-              <td>
-                <button type="button">
-                  <FiArrowRightCircle size={20} color="#251FC5" />
-                </button>
-              </td>
-            </tr>
+            ))
           }
         </tbody>
       </Table>
@@ -78,7 +74,7 @@ const Cadastro: React.FC = () => {
   <div>
   <Footer />
   </div>
-    </>
+  </>
   );
 }
-export default Cadastro;
+export default Cadastros;

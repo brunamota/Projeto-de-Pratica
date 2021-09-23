@@ -5,35 +5,39 @@ import '../login/style.css'
 import Lock from '../../assets/images/login.png'
 import Footer from '../../componets/basics/footer';
 
-import { MdLock, MdForum } from "react-icons/md"
-import { HiEye, HiEyeOff } from "react-icons/hi"
+import { MdMailOutline, MdAccountCircle } from "react-icons/md"
+
 import API from '../../services/API';
 
-
 function Login() {
-  const [username, setUser] = useState("")
-  const [password, setPassword] = useState("")
+  const [nome_cadastro, setUserName] = useState("")
+  const [email_cadastro, setEmail] = useState("")
+
+
   const [show, setShow] = useState(false)
 
   const history = useHistory();
 
-  async function Login(e:any) {
+  async function Login(e: any) {
     e.preventDefault();
 
     const data = {
-      username,
-      password,
-
+      nome_cadastro,
+      email_cadastro,
     }
-    try{
-      const response = await API.post('auth/login', data);
+    try {
+      console.log("oi")
+      
+      const response = await API.post('v1/pp/cadastros', data);
 
-      localStorage.setItem('username', username);
-      localStorage.setItem('token', response.data.token);
+      console.log("ok")
 
-      history.push('');
+      localStorage.setItem('nome_cadastro', response.data.nome_cadastro);
+      localStorage.setItem('email_cadastro', response.data.email_cadastro);
 
-    }catch(error){
+      history.push('/cadastros')
+
+    } catch (error) {
       alert('Autenticação sem sucesso, tente novamente!')
 
     }
@@ -56,48 +60,36 @@ function Login() {
             alt="MdLockLogin App"
           />
         </div>
+        <form onSubmit={Login}>
+          <div className="login-right">
+            <h1><strong>LOGIN</strong></h1>
 
-        <div className="login-right">
-          <h1><strong>LOGIN</strong></h1>
-
-          <div className="login-loginInputUser">
-            <MdForum />
-            <input
-              type="user"
-              placeholder="Digite seu user"
-              value={username}
-              onChange={e => setUser(e.target.value)}
-            />
-          </div>
-
-          <div className="login-loginInputPassword">
-            <MdLock />
-            <input
-              placeholder="Digite sua senha"
-              type={show ? "text" : "password"}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-            <div className="login-eye">
-              {show ? (
-                <HiEye
-                  size={20}
-                  onClick={handleClick}
-                />
-              ) : (
-                <HiEyeOff
-                  size={20}
-                  onClick={handleClick}
-                />
-              )}
+            <div className="login-loginInputUser">
+              <MdAccountCircle />
+              <input
+                type="user"
+                placeholder="Digite seu nome"
+                value={nome_cadastro}
+                onChange={e => setUserName(e.target.value)}
+              />
             </div>
+
+            <div className="login-loginInputPassword">
+              <MdMailOutline />
+              <input
+                placeholder="Digite seu email"
+                type={show ? "text" : "email_cadastro"}
+                value={email_cadastro}
+                onChange={e => setEmail(e.target.value)}
+              />
+
+            </div>
+
+            <button type="submit">
+              ENTRAR
+            </button>
           </div>
-
-          <button type="submit">
-            ENTRAR
-          </button>
-
-        </div>
+        </form>
       </div>
       <div className="header">
         <Footer />

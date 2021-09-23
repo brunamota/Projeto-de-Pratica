@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.ufjnet.projetodepratica.dtos.CadastroDTO;
 import net.ufjnet.projetodepratica.services.GestaoCadastro;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("v1/pp/cadastros")
 public class CadastroController {
@@ -82,11 +84,17 @@ public class CadastroController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<CadastroDTO> incluir(@RequestBody @Valid CadastroDTO objBody){
-		CadastroDTO objDTO = service.save(objBody);
-		objDTO.add(linkTo(methodOn(CadastroController.class).buscarUm(objDTO.getId())).withSelfRel());
-		
-		return ResponseEntity.ok(objDTO);
+	//@Operation(summary = "Login")
+	public ResponseEntity<CadastroDTO> incluir(@RequestBody @Valid  CadastroDTO dados){		
+		System.out.println("PostMapping");
+		CadastroDTO item = service.findByEmail(dados.getEmail());
+		if(item.getNome().equals(dados.getNome())) {
+			//System.out.println("ID:"+item.getId()+" Nome: "+item.getNome()+" Email: "+item.getEmail());
+			return ResponseEntity.ok(item);
+		}
+		else {
+			return (ResponseEntity<CadastroDTO>) ResponseEntity.status(200);
+		}
 	}
 	
 	@DeleteMapping("/{id}")

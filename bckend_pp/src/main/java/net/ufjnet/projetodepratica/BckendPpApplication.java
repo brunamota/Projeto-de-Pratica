@@ -27,9 +27,9 @@ public class BckendPpApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-	Cadastro cadastro01 = new Cadastro(1, "Bruna", "bruna@projetodepratica");	
-	Cadastro cadastro02 = new Cadastro(2, "Gabriela", "gabriela@projetodepratica");	
-	Cadastro cadastro03 = new Cadastro(3, "Pedro", "pedro@projetodepratica");	
+	Cadastro cadastro01 = new Cadastro(1, "Bruna", "bruna@projetodepratica.com");	
+	Cadastro cadastro02 = new Cadastro(2, "Gabriela", "gabriela@projetodepratica.com");	
+	Cadastro cadastro03 = new Cadastro(3, "Pedro", "pedro@projetodepratica.com");	
 		
 	cadastroDAO.saveAll(Arrays.asList(cadastro01,cadastro02, cadastro03));
 	
